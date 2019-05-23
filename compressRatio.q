@@ -9,7 +9,7 @@ cfg[`snappy]:(3;0);
 cfg[`lz4hc]:(4;1+til 12);
 
 lbs:12+til 9;
-crs:key[cfg]!{(lbs,/:\:cfg[x]0)cross cfg[x]1}'[key cfg];
+crs:key[cfg]!{(lbs,\:cfg[x]0)cross cfg[x]1}'[key cfg];
 
 res:flip`algorithm`uncompressed`compressed`time!();
 
