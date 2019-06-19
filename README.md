@@ -10,4 +10,4 @@ Accepts 1 optional input parameter (-col) to define your column values, default 
 Simple Q profiler script which will wrap all functions within the process and process run times into a report table. Can also unprofile once complete.
 
 ### access.q
-Access script to restrict users on a per table basis, per function basis or simply to not allow execution any update functions. 
+Access script to restrict users on a per table basis, per function basis or simply to not allow execution of any updates. 
