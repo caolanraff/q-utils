@@ -3,9 +3,10 @@
 
 .qp.prj:{[f;p]
   st:.z.p;
-  $[1<count p;.[.qp.orig f;p;{'x}];@[.qp.orig f;(*:)p;{'x}]];
+  r:@[{(1b;$[1<count y;x . y;x(*:)y])}[.qp.orig f];p;{(0b;x)}];
   et:.z.p;
   .qp.report,:(f;p;st;et;et-st);
+  $[r 0;r 1;'r 1]
   };
 
 .qp.func:{$[(`$1_($:)x)in key `;sv[`;]each x,/:where(type each(.:)x)=y;x]};
