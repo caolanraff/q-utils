@@ -6,9 +6,9 @@ strBrk:{y,(";" sv x),z};
 kreplace:{[x] $[`=qval:.q?x;x;"~~",string[qval],"~~"]};
 funcK:{$[0=t:type x;.z.s each x;t<100h;x;kreplace x]};
 
-//replace eg ,`FD`ABC`DEF with "enlist`FD`ABC`DEF"
-ereplace:{"~~enlist",(.Q.s1 first x),"~~"};
-ereptest:{((0=type x) & (1=count x) & (11=type first x)) | ((11=type x)&(1=count x))};
+//replace eg ,`FD`ABC`DEF with "enlist `FD`ABC`DEF" and ,1 with "enlist 1"
+ereplace:{"~~enlist ",(.Q.s1 first x),"~~"};
+ereptest:{(1=count x) & ((0=type x) & 11=type first x) | (type x) within 1 19h};
 funcEn:{$[ereptest x;ereplace x;0=type x;.z.s each x;x]};
 
 basic:{tidy .Q.s1 funcK funcEn x};
