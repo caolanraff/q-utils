@@ -4,7 +4,7 @@ strBrk:{y,(";" sv x),z};
 
 //replace k representation with equivalent q keyword
 //where .q has several names for one function, prefer key/value over inv/get
-kreplace:{[x] $[`=qval:.q?x;x;"~~",string[qval^(`inv`get!`key`value)qval],"~~"]};
+kreplace:{$[`=qval:.q?x;x;"~~",string[qval^(`inv`get!`key`value)qval],"~~"]};
 
 //select[>col] / select[<col] parse to >: / <:, which .q has as hclose / no name
 sortreplace:{@[x;0;{$[(>:)~x;"~~idesc~~";(<:)~x;"~~iasc~~";x]}]};

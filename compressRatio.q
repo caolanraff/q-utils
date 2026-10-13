@@ -10,15 +10,14 @@ cfg[`kdb]:(1;0);
 cfg[`gzip]:(2;til 10);
 cfg[`snappy]:(3;0);
 cfg[`lz4hc]:(4;1+til 12);
+//zstd (algorithm 5) was added in the kdb+ 4.1 release (2024.02.13)
+if[(.z.K>=4.1)&.z.k>=2024.02.13;cfg[`zstd]:(5;-7+til 30)];
 
 lbs:12+til 9;
 
 res:flip`algorithm`uncompressed`compressed`msPerRead!();
 
 // function definitions
-//zstd (algorithm 5) needs kdb+ 4.1+, so only include it if this build can compress with it
-zstdOk:{@[{-19!(x;y;17;5;1);hdel y;1b}[x];` sv dir,`zstdtest;0b]};
-
 getCR:{[a;r]
   n:`$string[a],"_","_"sv string r;
   f:` sv dir,n;
@@ -29,19 +28,15 @@ getCR:{[a;r]
   hdel f;
   };
 
-main:{getCR[x]each crs[x]};
-
 cleanup:{if[not ()~k:key x;hdel each ` sv/:x,/:k;hdel x]};
 
 run:{
   src set value col;
-  if[zstdOk src;@[`cfg;`zstd;:;(5;-7+til 30)]];
-  crs::key[cfg]!{(lbs,\:cfg[x]0)cross cfg[x]1}'[key cfg];
-  main each key crs;
+  {getCR[x]each(lbs,\:cfg[x]0)cross cfg[x]1}each key cfg;
+  update perDec:100*(uncompressed-compressed)%uncompressed from `res;
+  delete from `res where perDec<0;
   };
 
 // main
 @[run;::;{cleanup dir;'x}];
 cleanup dir;
-update perDec:100*(uncompressed-compressed)%uncompressed from `res;
-delete from `res where perDec<0;
