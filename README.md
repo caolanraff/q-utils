@@ -2,12 +2,23 @@
 Utility scripts
 
 ### compressRatio.q
-Simple script to compare all possible combinations of the 4 available compression algorithms (kdb+, gzip, snappy, lz4hc) for a single flat file (1 column).
-Results will contain percentage decrease in size and the time to get column with t:1000 ran 3 times and the average taken.
-Accepts 1 optional input parameter (-col) to define your column values, default is 1000000?10f
+Simple script to compare all possible combinations of the available compression algorithms (kdb+, gzip, snappy, lz4hc, and zstd on kdb+ 4.1+) and logical block sizes for a single flat file (1 column).
+Results (`res`) contain the compressed/uncompressed sizes, percentage decrease in size (`perDec`) and the average time in ms to `get` the column (`msPerRead`, from `\t:1000` ran 3 times).
+Combinations where compression made the file larger are removed from the results.
+Accepts 1 optional input parameter (-col) to define your column values, default is 1000000?10f.
+Temporary files are written to a `compressRatio_<pid>` directory, which is removed when the script finishes or fails.
+Note: this takes a while at the default size, since each combination is read 3000 times (around 1 minute for 10000 floats, longer with zstd).
 
 ### qprof.q
 Simple Q profiler script which will wrap all functions within the process and process run times into a report table. Can also unprofile once complete.
+
+### buildFuncSelect.q
+Converts a qSQL query string into its equivalent functional form, as a string:
+```q
+q)buildFuncSelect "select a,b by c from t where a in 1 2"
+"?[t;enlist (in;`a;1 2);(enlist `c)!enlist `c;(`a`b)!`a`b]"
+```
+Works for select, exec, update and delete, including nested selects and `select[n]` / `select[>col]`.
 
 ### access.q
 Access script to restrict users on a per table basis, per function basis or simply to not allow execution of any updates. 
